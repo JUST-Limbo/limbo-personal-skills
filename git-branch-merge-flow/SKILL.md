@@ -40,6 +40,7 @@ x-skill-version: 1.1.0
 
 - 默认远端为 `origin`，分支名与本地一致；若你使用其它 remote 或特殊分支策略，需在对话里额外说明。
 - 若当前分支存在未提交改动，需要自动提交时，提交说明默认使用**中文**，并尽量贴合实际改动文件内容；不要只写笼统描述。
+- 提交说明应避免机械化表达，不要写“将 A 分支合并到 B 分支”这类不自然表述。
 - 若用户明确给出提交说明格式或文案，优先按用户要求执行。
 
 ## Instructions
@@ -75,8 +76,9 @@ $CurrentBranch = git rev-parse --abbrev-ref HEAD
 # Commit on current branch only when there are staged/unstaged changes
 if ((git status --porcelain).Length -gt 0) {
   # Use a Chinese commit message that is close to actual changed files/content.
+  # Avoid robotic phrasing like "merge branch A into branch B" in commit message.
   # Adjust the text according to real changes before running.
-  $CommitMessage = "更新当前分支改动并准备合并到 $TargetBranch"
+  $CommitMessage = "完善文档说明与流程细节"
   git add .
   git commit -m $CommitMessage
 }
