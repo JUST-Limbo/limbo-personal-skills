@@ -1,7 +1,7 @@
 ---
 name: git-branch-merge-flow
 description: Pushes the current branch, merges it into a user-specified target branch, pushes that target branch, then switches back when merge succeeds. Stays on the target branch without pushing if merge conflicts. Use when the user sends /git-branch-merge-flow or asks to merge the current branch into another branch.
-x-skill-version: 1.1.0
+x-skill-version: 1.2.0
 ---
 
 # Git Branch Merge Flow
@@ -42,6 +42,7 @@ x-skill-version: 1.1.0
 - 若当前分支存在未提交改动，需要自动提交时，提交说明默认使用**中文**，并尽量贴合实际改动文件内容；不要只写笼统描述。
 - 提交说明应避免机械化表达，不要写“将 A 分支合并到 B 分支”这类不自然表述。
 - 若用户明确给出提交说明格式或文案，优先按用户要求执行。
+- 在 Windows PowerShell 中，避免用管道把中文直接传给 `git commit -F -`；请使用 UTF-8（无 BOM）临时文件传入 `-F`，以降低中文提交信息出现乱码（如 `??`）的概率。
 
 ## Instructions
 
@@ -80,7 +81,12 @@ if ((git status --porcelain).Length -gt 0) {
   # Adjust the text according to real changes before running.
   $CommitMessage = "完善文档说明与流程细节"
   git add .
-  git commit -m $CommitMessage
+  # Write commit message with UTF-8 (no BOM) to avoid garbled Chinese in PowerShell.
+  $CommitMsgFile = Join-Path (git rev-parse --git-dir) "commit-msg-utf8.txt"
+  $Utf8NoBom = New-Object System.Text.UTF8Encoding $false
+  [System.IO.File]::WriteAllText($CommitMsgFile, $CommitMessage, $Utf8NoBom)
+  git commit -F $CommitMsgFile
+  Remove-Item -Force $CommitMsgFile
 }
 
 # Push current branch to remote with the same name
@@ -119,7 +125,7 @@ Conflict case report must explicitly state:
 
 ## Version Notes
 
-- Current effective version: `1.1.0`
+- Current effective version: `1.2.0`
 - Default behavior when user does not specify version: use this latest `SKILL.md`.
 - Historical snapshots should be kept under `versions/<version>/SKILL.md`.
 
