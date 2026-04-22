@@ -1,7 +1,6 @@
 ---
 name: git-branch-merge-flow
 description: Pushes the current branch, merges it into a user-specified target branch, pushes that target branch, then switches back when merge succeeds. Stays on the target branch without pushing if merge conflicts. Use when the user sends /git-branch-merge-flow or asks to merge the current branch into another branch.
-x-skill-version: 1.1.0
 ---
 
 # Git Branch Merge Flow
@@ -39,15 +38,14 @@ x-skill-version: 1.1.0
 ### 使用注意
 
 - 默认远端为 `origin`，分支名与本地一致；若你使用其它 remote 或特殊分支策略，需在对话里额外说明。
-- 若当前分支存在未提交改动，需要自动提交时，提交说明默认使用**中文**，并尽量贴合实际改动文件内容；不要只写笼统描述。
-- 若用户明确给出提交说明格式或文案，优先按用户要求执行。
+- 自动提交会使用脚本中的默认提交说明；若你希望每次自定义提交信息，可在触发时一并写明要求。
 
 ## Instructions
 
 Follow this workflow when the user provides the **目标分支** (target branch) name, often via `/git-branch-merge-flow 合并到<目标分支>`:
 
 1. Capture **当前分支** (current branch) as the branch that will be pushed and merged.
-2. Commit pending changes on the current branch (if there are changes), with a Chinese message that reflects the real file-level changes.
+2. Commit pending changes on the current branch (if there are changes).
 3. Push the current branch to its same-named remote branch.
 4. Switch to the target branch.
 5. Merge the current branch into the target branch.
@@ -74,11 +72,8 @@ $CurrentBranch = git rev-parse --abbrev-ref HEAD
 
 # Commit on current branch only when there are staged/unstaged changes
 if ((git status --porcelain).Length -gt 0) {
-  # Use a Chinese commit message that is close to actual changed files/content.
-  # Adjust the text according to real changes before running.
-  $CommitMessage = "更新当前分支改动并准备合并到 $TargetBranch"
   git add .
-  git commit -m $CommitMessage
+  git commit -m "chore: sync branch $CurrentBranch before merge to $TargetBranch"
 }
 
 # Push current branch to remote with the same name
@@ -114,12 +109,6 @@ Conflict case report must explicitly state:
 - merge stopped on the **目标分支**
 - did not switch back to the **当前分支**
 - **目标分支** was not pushed
-
-## Version Notes
-
-- Current effective version: `1.1.0`
-- Default behavior when user does not specify version: use this latest `SKILL.md`.
-- Historical snapshots should be kept under `versions/<version>/SKILL.md`.
 
 ## Example Prompt
 
