@@ -1,7 +1,7 @@
 ---
 name: git-branch-merge-flow
 description: Pushes the current branch, merges it into a user-specified target branch, pushes that target branch, then switches back when merge succeeds. Stays on the target branch without pushing if merge conflicts. Use when the user sends /git-branch-merge-flow or asks to merge the current branch into another branch.
-x-skill-version: 1.2.0
+x-skill-version: 1.3.2
 ---
 
 # Git Branch Merge Flow
@@ -74,6 +74,24 @@ $TargetBranch = "target-branch-name"
 # Current branch (source of the merge)
 $CurrentBranch = git rev-parse --abbrev-ref HEAD
 
+# Detect repository identifier dynamically for final report.
+# Priority:
+# 1) Parse repo name from `origin` remote URL (drop protocol/path suffix and optional `.git`)
+# 2) Fallback to git toplevel directory name when `origin` is unavailable
+$OriginUrl = git remote get-url origin 2>$null
+$RepoIdentifier = ""
+if ($LASTEXITCODE -eq 0 -and $OriginUrl) {
+  $NormalizedUrl = $OriginUrl.Trim() -replace '\\', '/'
+  $RepoIdentifier = ($NormalizedUrl -split '/')[-1]
+  if ($RepoIdentifier.EndsWith(".git")) {
+    $RepoIdentifier = $RepoIdentifier.Substring(0, $RepoIdentifier.Length - 4)
+  }
+}
+if (-not $RepoIdentifier) {
+  $GitTopLevel = git rev-parse --show-toplevel
+  $RepoIdentifier = Split-Path $GitTopLevel -Leaf
+}
+
 # Commit on current branch only when there are staged/unstaged changes
 if ((git status --porcelain).Length -gt 0) {
   # Use a Chinese commit message that is close to actual changed files/content.
@@ -106,6 +124,7 @@ if ($LASTEXITCODE -ne 0) {
 git push -u origin $TargetBranch
 git checkout $CurrentBranch
 Write-Host "Done: pushed $CurrentBranch, merged into $TargetBranch, pushed $TargetBranch, switched back to $CurrentBranch."
+Write-Host "涉及仓库：$RepoIdentifier"
 ```
 
 ## Output Requirements
@@ -116,6 +135,29 @@ Always report:
 - whether the current branch had a new commit before push
 - merge status
 - final branch after workflow
+- involved repository line in Chinese: `涉及仓库：\`<repo-identifier>\``
+- `<repo-identifier>` must be dynamically detected at runtime (for example from `git remote get-url origin`, or when unavailable, fallback to the git toplevel directory name); never hardcode a fixed repository name in this skill output.
+
+Success case should follow this style:
+
+```text
+已按 /git-branch-merge-flow 合并到<目标分支> 执行完成，结果如下：
+
+- 当前分支（CurrentBranch）：`<current-branch>`
+- 目标分支（TargetBranch）：`<target-branch>`
+- 当前分支是否先产生新提交：<是/否>
+- 新提交：`<commit-sha>`（`<commit-message>`）
+- 合并状态：成功（`<target-branch>` fast-forward 合并 `<current-branch>`）
+- 最终所在分支：`<final-branch>`
+- 涉及仓库：`<repo-identifier>`
+
+已执行的关键动作：
+
+- 已将 `<current-branch>` 推送到远端
+- 已切换到 `<target-branch>` 并合并 `<current-branch>`
+- 已将 `<target-branch>` 推送到远端
+- 已切回 `<current-branch>` 分支
+```
 
 Conflict case report must explicitly state:
 
@@ -125,7 +167,7 @@ Conflict case report must explicitly state:
 
 ## Version Notes
 
-- Current effective version: `1.2.0`
+- Current effective version: `1.3.2`
 - Default behavior when user does not specify version: use this latest `SKILL.md`.
 - Historical snapshots should be kept under `versions/<version>/SKILL.md`.
 
