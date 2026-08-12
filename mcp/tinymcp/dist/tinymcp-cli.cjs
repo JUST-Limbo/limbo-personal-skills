@@ -13949,7 +13949,7 @@ async function convertToFormats(input, opts = {}) {
 // bin/cli.js
 var kb = (n) => `${(n / 1024).toFixed(1)}KB`;
 var program2 = new Command();
-program2.name("tinymcp").description("\u7528 TinyPNG \u5B98\u65B9 API \u538B\u7F29\u6216\u8F6C\u6362\u56FE\u7247\u683C\u5F0F").argument("<patterns...>", "\u56FE\u7247\u8DEF\u5F84\u6216 glob\uFF0C\u5982 'assets/**/*.{png,jpg}'").option("-k, --key <keys>", "API Key\uFF08\u9ED8\u8BA4 TINIFY_API_KEY\uFF1B\u591A\u4E2A\u7528 , \u6216 ; \u5206\u9694\uFF09").option("-o, --out <dir>", "\u8F93\u51FA\u76EE\u5F55\u6216\u6587\u4EF6\u8DEF\u5F84").option(
+program2.name("tinymcp").description("\u7528 TinyPNG \u5B98\u65B9 API \u538B\u7F29\u6216\u8F6C\u6362\u56FE\u7247\u683C\u5F0F").argument("<patterns...>", "\u56FE\u7247\u8DEF\u5F84\u6216 glob\uFF0C\u5982 'assets/**/*.{png,jpg}'").option("-k, --key <keys>", "API Key\uFF08\u9ED8\u8BA4 TINIFY_API_KEY\uFF1B\u591A\u4E2A\u7528 , \u6216 ; \u5206\u9694\uFF09").option("-o, --out <dir>", "\u8F93\u51FA\u76EE\u5F55").option(
   "-f, --format <fmt>",
   "\u76EE\u6807\u683C\u5F0F\uFF1Aavif | webp | jpg | png | jxl\uFF08\u6307\u5B9A\u5219\u8F6C\u683C\u5F0F\uFF0C\u5426\u5219\u4EC5\u538B\u7F29\u539F\u683C\u5F0F\uFF09"
 ).option(

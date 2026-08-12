@@ -8,7 +8,7 @@ import { compressFile } from "./core.js";
 
 const server = new McpServer({
   name: "tinynokeymcp",
-  version: "1.0.0",
+  version: "1.0.1",
 });
 
 function kb(n) {

@@ -27759,7 +27759,7 @@ async function compressFile(input, options = {}) {
 // src/mcp.js
 var server = new McpServer({
   name: "tinynokeymcp",
-  version: "1.0.0"
+  version: "1.0.1"
 });
 function kb(n) {
   return (n / 1024).toFixed(1) + "KB";

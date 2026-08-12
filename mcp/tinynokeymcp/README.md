@@ -1,7 +1,7 @@
 ---
 name: tinynokeymcp
 description: MCP server for compressing PNG/JPG via TinyPNG web backend without API key
-x-mcp-version: 1.0.0
+x-mcp-version: 1.0.1
 x-source-repo: JUST-Limbo/limbo-ai-toolkit
 x-source-path: mcp/tinynokeymcp
 ---
@@ -12,9 +12,9 @@ x-source-path: mcp/tinynokeymcp
 
 通过模拟官网浏览器上传，请求 `tinypng.com/backend/opt/shrink`（**非**官方 Developer API）。实现参考公开项目 [yongplus/tinypng](https://github.com/yongplus/tinypng) Web 模式、[super-tinypng](https://github.com/zhanyuzhang/super-tinypng)。
 
-当前版本：**1.0.0**
+当前版本：**1.0.1**
 
-> **取用原则**：从 `mcp/tinynokeymcp/dist/` **只复制** `tinynokeymcp.cjs`（+ 可选 `tinynokeymcp-cli.cjs`）到目标项目的 **`.cursor/tinynokeymcp/`**。无需 `npm install`，不必复制 `src/`。
+> **取用原则**：从 `mcp/tinynokeymcp/dist/` **只复制** `tinynokeymcp.cjs`（以及按需复制 `tinynokeymcp-cli.cjs`）。目标存放位置与 MCP 配置文件由调用方根据所用客户端的规则决定；无需 `npm install`，不必复制 `src/` 等源码。
 >
 > **生产环境请用 [tinymcp](../tinymcp/README.md)**（官方 API + Key）。使用前必读 [DISCLAIMER.md](DISCLAIMER.md)。
 
@@ -24,7 +24,7 @@ x-source-path: mcp/tinynokeymcp
 
 ### 解决什么问题
 
-- 不想申请 `TINIFY_API_KEY`，偶尔在本地 / Cursor 里压几张 **PNG / JPG**
+- 不想申请 `TINIFY_API_KEY`，偶尔在本地或支持 MCP 的客户端中压几张 **PNG / JPG**
 - 对话或 CLI 触发压缩，**零 Key 配置**
 
 ### 适用场景
@@ -68,31 +68,9 @@ x-source-path: mcp/tinynokeymcp
 - 能访问 `tinypng.com`（国外服务，国内可能需要代理）
 - 已阅读 [DISCLAIMER.md](DISCLAIMER.md)
 
-### 1. 复制 dist 并配置 MCP
+### 1. 取用并配置 MCP
 
-```text
-your-project/
-├── .cursor/
-│   ├── mcp.json
-│   └── tinynokeymcp/
-│       ├── tinynokeymcp.cjs          # 必填
-│       └── tinynokeymcp-cli.cjs      # 可选
-```
-
-`.cursor/mcp.json` 示例（可与 `tinymcp` 并存，注意 `mcpServers` 里两个条目）：
-
-```json
-{
-  "mcpServers": {
-    "tinynokeymcp": {
-      "command": "node",
-      "args": [".cursor/tinynokeymcp/tinynokeymcp.cjs"]
-    }
-  }
-}
-```
-
-**无需** `TINIFY_API_KEY`。保存后重启 Cursor。
+按照[取用方式](#取用方式)复制构建产物，并根据所用 MCP 客户端的规则配置 `tinynokeymcp.cjs` 的实际路径。本工具无需 `TINIFY_API_KEY`。保存后按客户端提供的方式重载 MCP 配置；必要时重启客户端。
 
 ### 2. 对话示例
 
@@ -103,8 +81,8 @@ your-project/
 ### 3. CLI（可选）
 
 ```powershell
-node .cursor/tinynokeymcp/tinynokeymcp-cli.cjs logo.png
-node .cursor/tinynokeymcp/tinynokeymcp-cli.cjs "assets/**/*.png" -o dist
+node "path/to/tinynokeymcp-cli.cjs" logo.png
+node "path/to/tinynokeymcp-cli.cjs" "assets/**/*.png" -o dist
 ```
 
 未指定 `-o` 时**覆盖原文件**。
@@ -152,6 +130,39 @@ npm run build
 
 ---
 
+## 取用方式
+
+从 `mcp/tinynokeymcp/dist/` 取用以下已打包文件：
+
+- MCP Server 必需：`tinynokeymcp.cjs`
+- CLI 可选：`tinynokeymcp-cli.cjs`
+
+将文件放到调用方允许且能够访问的位置。不同 MCP 客户端的配置目录和文件格式不同，应以所用客户端的规则为准，不要默认使用某个客户端的专属目录。
+
+以下仅展示 stdio MCP 启动项所需的通用字段；配置外层结构和路径写法按客户端要求调整：
+
+```json
+{
+  "mcpServers": {
+    "tinynokeymcp": {
+      "command": "node",
+      "args": ["<实际路径>/tinynokeymcp.cjs"]
+    }
+  }
+}
+```
+
+说明：
+
+- **只复制** `dist/tinynokeymcp.cjs`（以及按需复制 `dist/tinynokeymcp-cli.cjs`），**不要**复制 `src/` 等源码。
+- 是否把 `.cjs` 文件放入项目以及是否提交 git，由调用方项目的依赖与安全策略决定。
+- 多个客户端可以指向同一份 `.cjs` 文件，也可以各自维护；路径必须按各客户端的配置规则填写。
+- 本工具**无需** `TINIFY_API_KEY`。
+
+**不必复制**：`src/`、`bin/`、`scripts/`、`package.json`、`package-lock.json`、`node_modules/`。
+
+---
+
 ## 与 tinymcp 对比
 
 | | tinynokeymcp | tinymcp |
@@ -169,6 +180,7 @@ npm run build
 
 | 版本 | 说明 |
 |------|------|
+| **1.0.1** | 取用和客户端配置说明改为客户端无关表述 |
 | **1.0.0** | 初始版本：Web 后台免 Key 压缩；MCP + CLI + `compressFile` |
 
 ---

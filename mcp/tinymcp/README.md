@@ -1,7 +1,7 @@
 ---
 name: tinymcp
 description: MCP server for compressing images via TinyPNG official API
-x-mcp-version: 2.2.0
+x-mcp-version: 2.2.1
 x-source-repo: JUST-Limbo/limbo-ai-toolkit
 x-source-path: mcp/tinymcp
 ---
@@ -10,9 +10,9 @@ x-source-path: mcp/tinymcp
 
 基于 [TinyPNG 官方 Developer API](https://tinypng.com/developers) 的图片压缩 **MCP Server** 与 **CLI**。
 
-当前版本：**2.2.0**（官方 API + `tinify` SDK，支持多 Key、格式转换）
+当前版本：**2.2.1**（官方 API + `tinify` SDK，支持多 Key、格式转换）
 
-> **取用原则**：从 `mcp/tinymcp/dist/` **只复制** `tinymcp.cjs`（+ 可选 `tinymcp-cli.cjs`）到目标项目的 **`.cursor/tinymcp/`** 或 **`.claude/tinymcp/`**。无需 `npm install`，不必复制 `src/` 等源码。
+> **取用原则**：从 `mcp/tinymcp/dist/` **只复制** `tinymcp.cjs`（以及按需复制 `tinymcp-cli.cjs`）。目标存放位置与 MCP 配置文件由调用方根据所用客户端的规则决定；无需 `npm install`，不必复制 `src/` 等源码。
 
 ---
 
@@ -83,7 +83,7 @@ TINIFY_API_KEY=abc123,def456;ghi789
 - **轮询**：每次压缩按顺序选用下一个 Key，均衡分摊额度
 - **自动切换**：当前 Key 返回 401/429 或额度类错误时，自动尝试列表中的下一个 Key
 
-`.cursor/mcp.json` 示例：
+MCP 客户端配置中的环境变量示例：
 
 ```json
 "env": {
@@ -91,43 +91,11 @@ TINIFY_API_KEY=abc123,def456;ghi789
 }
 ```
 
-### 2. 安装 dist 并配置 MCP
+### 2. 取用并配置 MCP
 
-从本仓库 `mcp/tinymcp/dist/` 复制单文件到目标项目：
+按照[取用方式](#取用方式)复制构建产物，并根据所用 MCP 客户端的规则配置实际路径和 `TINIFY_API_KEY`。保存后按客户端提供的方式重载 MCP 配置；必要时重启客户端。
 
-```text
-your-project/
-├── .cursor/
-│   ├── mcp.json
-│   └── tinymcp/
-│       ├── tinymcp.cjs          # 必填（自 dist/tinymcp.cjs 复制）
-│       └── tinymcp-cli.cjs      # 可选（自 dist/tinymcp-cli.cjs 复制）
-└── .claude/                     # 若用 Claude Code，可同样放一份 tinymcp/
-    └── tinymcp/
-        └── tinymcp.cjs
-```
-
-编辑 `.cursor/mcp.json`（路径相对**仓库根目录**）：
-
-```json
-{
-  "mcpServers": {
-    "tinymcp": {
-      "command": "node",
-      "args": [".cursor/tinymcp/tinymcp.cjs"],
-      "env": {
-        "TINIFY_API_KEY": "你的API_KEY"
-      }
-    }
-  }
-}
-```
-
-保存后 **重启 Cursor** 或在设置中刷新 MCP。
-
-也可将 Key 设为系统 / 用户环境变量 `TINIFY_API_KEY`，则 `mcp.json` 可省略 `env` 段。
-
-> **本仓库（limbo-ai-toolkit）维护者**：开发与构建在 `mcp/tinymcp/`，当前 `.cursor/mcp.json` 指向 `mcp/tinymcp/dist/tinymcp.cjs` 便于本仓调试；**其它项目取用请一律放入 `.cursor/tinymcp/`**。
+> **本仓库（limbo-ai-toolkit）维护者**：开发与构建位于 `mcp/tinymcp/`，本仓库当前使用的客户端配置可直接指向 `mcp/tinymcp/dist/tinymcp.cjs`，无需另行复制。
 
 ### 3. 在对话中使用
 
@@ -146,16 +114,16 @@ Agent 会调用 `compress_local_image` 或 `compress_images_glob`。未指定输
 仓库已包含 esbuild 单文件 `dist/tinymcp-cli.cjs`，**无需 `npm install`**：
 
 ```powershell
-# Windows PowerShell（路径按你放置 dist 的位置调整）
+# Windows PowerShell（将 path/to 替换为 CLI 文件的实际存放目录）
 $env:TINIFY_API_KEY = "你的API_KEY"
-node .cursor/tinymcp/tinymcp-cli.cjs logo.png
-node .cursor/tinymcp/tinymcp-cli.cjs "assets/**/*.png" -o dist
+node "path/to/tinymcp-cli.cjs" logo.png
+node "path/to/tinymcp-cli.cjs" "assets/**/*.png" -o dist
 ```
 
 ```bash
 # macOS / Linux
 export TINIFY_API_KEY="你的API_KEY"
-node .cursor/tinymcp/tinymcp-cli.cjs logo.png
+node "path/to/tinymcp-cli.cjs" logo.png
 ```
 
 ---
@@ -234,7 +202,7 @@ tinymcp <patterns...> [选项]
 
 选项:
   -k, --key <keys>    API Key（默认 TINIFY_API_KEY；多个用 , 或 ; 分隔）
-  -o, --out <dir>     输出目录或文件路径
+  -o, --out <dir>     输出目录
   -f, --format <fmt>  转格式：avif | webp | jpg | png | jxl（省略则仅压缩原格式）
   -F, --formats <list>  单文件导出多格式，逗号分隔，如 avif,webp,jpg
   -w, --width <px>    目标宽度
@@ -246,10 +214,10 @@ tinymcp <patterns...> [选项]
 
 ```powershell
 # 转 WebP（同目录生成 logo.webp，保留 logo.png）
-node .cursor/tinymcp/tinymcp-cli.cjs logo.png -f webp
+node "path/to/tinymcp-cli.cjs" logo.png -f webp
 
 # 单张导出三格式（计 3 次额度）
-node .cursor/tinymcp/tinymcp-cli.cjs hero.jpg -F avif,webp,jpg -o dist
+node "path/to/tinymcp-cli.cjs" hero.jpg -F avif,webp,jpg -o dist
 ```
 
 ---
@@ -301,8 +269,8 @@ mcp/tinymcp/
 
 | | MCP（`tinymcp.cjs`） | CLI（`tinymcp-cli.cjs`） |
 |---|----------------------|--------------------------|
-| **谁用** | Cursor / Claude 里的 Agent | 你在终端 |
-| **怎么触发** | 对话中让 Agent 调 tool | 敲 `tinymcp` 或 `node dist/tinymcp-cli.cjs` |
+| **谁用** | 支持 MCP 的客户端或 Agent | 你在终端 |
+| **怎么触发** | 对话中让 Agent 调 tool | 执行 `node "path/to/tinymcp-cli.cjs"`（路径按实际位置替换）；若调用方另行注册了命令，也可使用对应命令名 |
 | **协议** | MCP stdio | 命令行参数 |
 
 二者共用 `src/core.js`，压缩逻辑一致。
@@ -333,19 +301,21 @@ npm run build
 
 ## 取用方式
 
-将 `mcp/tinymcp/dist/` 中的单文件复制到目标项目的 **`.cursor/tinymcp/`**（或 **`.claude/tinymcp/`**），并配置 `.cursor/mcp.json`：
+从 `mcp/tinymcp/dist/` 取用以下已打包文件：
 
-```text
-.cursor/mcp.json
-.cursor/tinymcp/tinymcp.cjs
-```
+- MCP Server 必需：`tinymcp.cjs`
+- CLI 可选：`tinymcp-cli.cjs`
+
+将文件放到调用方允许且能够访问的位置。不同 MCP 客户端的配置目录和文件格式不同，应以所用客户端的规则为准，不要默认使用 `.cursor/`、`.claude/` 或其它客户端专属目录。
+
+以下仅展示 stdio MCP 启动项所需的通用字段；配置外层结构和路径写法按客户端要求调整：
 
 ```json
 {
   "mcpServers": {
     "tinymcp": {
       "command": "node",
-      "args": [".cursor/tinymcp/tinymcp.cjs"],
+      "args": ["<实际路径>/tinymcp.cjs"],
       "env": {
         "TINIFY_API_KEY": "你的API_KEY"
       }
@@ -356,9 +326,9 @@ npm run build
 
 说明：
 
-- **只复制** `dist/tinymcp.cjs`（+ 可选 `dist/tinymcp-cli.cjs`），**不要**复制 `src/` 等源码。
-- **`tinymcp/*.cjs` 建议提交 git**，团队 clone 即可用。
-- **Cursor + Claude 共用**：只维护一份（如 `.cursor/tinymcp/`），两边 MCP 配置指向同一路径。
+- **只复制** `dist/tinymcp.cjs`（以及按需复制 `dist/tinymcp-cli.cjs`），**不要**复制 `src/` 等源码。
+- 是否把 `.cjs` 文件放入项目以及是否提交 git，由调用方项目的依赖与安全策略决定。
+- 多个客户端可以指向同一份 `.cjs` 文件，也可以各自维护；路径必须按各客户端的配置规则填写。
 - **Key 勿提交**：`TINIFY_API_KEY` 用本机 `env` 或环境变量。
 
 **不必复制**：`src/`、`bin/`、`scripts/`、`package.json`、`package-lock.json`、`node_modules/`。
@@ -369,7 +339,7 @@ npm run build
 
 ### 启动报错「缺少 TinyPNG API Key」
 
-未配置 `TINIFY_API_KEY`。在 `.cursor/mcp.json` 的 `env` 中填入 Key，或设置系统环境变量后重启 Cursor。
+未配置 `TINIFY_API_KEY`。在所用 MCP 客户端配置的 `env` 中填入 Key，或设置系统环境变量后重载 MCP 配置；必要时重启客户端。
 
 ### 压缩失败 / 401
 
@@ -406,6 +376,7 @@ Key 无效或过期。到 https://tinypng.com/dashboard/api 核对。
 
 | 版本 | 说明 |
 |------|------|
+| **2.2.1** | 取用说明改为客户端无关表述；修正 CLI `--out` 为仅支持输出目录 |
 | **2.2.0** | 新增格式转换：`convertFile` / `convertToFormats`；MCP `convert_*` Tools；CLI `-f` / `-F` |
 | **2.1.1** | MCP 默认输出改为覆盖原文件（与 CLI 一致） |
 | **2.1.0** | 支持 `TINIFY_API_KEY` 多 Key（`,` / `;` 分隔），轮询 + 失败自动切换 |

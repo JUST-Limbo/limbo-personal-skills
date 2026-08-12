@@ -16,7 +16,7 @@ setApiKey(process.env.TINIFY_API_KEY);
 
 const server = new McpServer({
   name: "tinymcp",
-  version: "2.2.0",
+  version: "2.2.1",
 });
 
 function kb(n) {

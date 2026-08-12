@@ -1,6 +1,6 @@
 {
   "name": "@limbo/tinynokeymcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TinyPNG 官网 Web 后台免 Key 图片压缩 MCP + CLI（非官方 API）",
   "type": "module",
   "bin": {

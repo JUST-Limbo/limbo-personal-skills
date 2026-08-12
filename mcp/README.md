@@ -1,6 +1,6 @@
 # MCP 服务器
 
-本目录存放可复用的 MCP Server，供各项目接入 [Cursor](https://cursor.com/)、Claude Desktop 等支持 MCP 的客户端。
+本目录存放可复用的 MCP Server，供各项目接入支持 MCP 的客户端。
 
 维护约定见 [AGENTS.md](../AGENTS.md)。
 
@@ -8,105 +8,16 @@
 
 ## 取用原则
 
-取用方将 `dist/*.cjs` 放入目标项目的 **`.cursor/tinymcp/`**（或 **`.claude/tinymcp/`**），无需 `npm install`，不必复制源码。
+取用方只复制各 MCP 的 `dist/*.cjs` 构建产物，无需 `npm install`，不必复制源码。构建产物的目标存放位置、MCP 配置文件及重载方式，由调用方根据所用客户端的规则决定。
 
 ---
 
 ## 清单
 
-| 名称 | 说明 |
-|------|------|
-| tinymcp | 图片压缩/转格式（TinyPNG **官方 API**，须 Key） |
-| tinynokeymcp | 免 Key 压缩 PNG/JPG（官网 **Web 后台**，非官方 API；见 DISCLAIMER） |
-
----
-
-## tinynokeymcp
-
-### 功能说明
-
-模拟 [yongplus/tinypng](https://github.com/yongplus/tinypng) Web 模式：POST `tinypng.com/backend/opt/shrink` + 随机 `X-Forwarded-For`，**无需** `TINIFY_API_KEY`。
-
-- **MCP Tools**：`compress_local_image`、`compress_images_glob`
-- **CLI**：`dist/tinynokeymcp-cli.cjs`
-- **限制**：仅 PNG/JPG，单文件约 ≤5MB；**不适合生产**
-
-详细说明与风险见 [`tinynokeymcp/README.md`](tinynokeymcp/README.md)、[`tinynokeymcp/DISCLAIMER.md`](tinynokeymcp/DISCLAIMER.md)。
-
-### 使用方法（其它项目）
-
-1. 从 `mcp/tinynokeymcp/dist/` 复制 `tinynokeymcp.cjs` 到 **`.cursor/tinynokeymcp/`**
-2. 在 `.cursor/mcp.json` 增加 `tinynokeymcp` 条目（无需 env Key）
-3. 重启 Cursor
-
----
-
-## tinymcp
-
-### 功能说明
-
-通过 [TinyPNG 官方 Developer API](https://tinypng.com/developers) 压缩或转换本地 PNG/JPG/WebP/AVIF。
-
-- **MCP Tools**：`compress_*`、`convert_*`（含多格式导出）
-- **CLI**：`dist/tinymcp-cli.cjs`（命令名 `tinymcp`）
-- **前提**：`TINIFY_API_KEY`（[申请 Key](https://tinypng.com/developers)；多个 Key 用 `,` 或 `;` 分隔）
-- **额度**：免费账户约 500 次/月（以官网为准）
-
-详细说明见 [`tinymcp/README.md`](tinymcp/README.md)。免责声明见 [`tinymcp/DISCLAIMER.md`](tinymcp/DISCLAIMER.md)。
-
-### 使用方法（本仓库，维护者）
-
-本仓为 toolkit **维护仓库**：`dist` 在 `mcp/tinymcp/dist/`，`.cursor/mcp.json` 指向该路径便于调试。取用方请按下方「其它项目」约定。
-
-1. 在 [`.cursor/mcp.json`](../.cursor/mcp.json) 填入 `TINIFY_API_KEY`
-2. `npm run build` 后确认 `mcp/tinymcp/dist/tinymcp.cjs` 存在
-3. 重启 Cursor
-
-### 使用方法（其它项目）
-
-1. 从 `mcp/tinymcp/dist/` 复制 `tinymcp.cjs`（+ 可选 `tinymcp-cli.cjs`）到 **`.cursor/tinymcp/`**
-2. 配置 `.cursor/mcp.json`：
-
-```text
-.cursor/mcp.json
-.cursor/tinymcp/tinymcp.cjs
-```
-
-```json
-{
-  "mcpServers": {
-    "tinymcp": {
-      "command": "node",
-      "args": [".cursor/tinymcp/tinymcp.cjs"],
-      "env": {
-        "TINIFY_API_KEY": "你的API_KEY"
-      }
-    }
-  }
-}
-```
-
-3. 重启 Cursor
-
-详见 [`tinymcp/README.md#取用方式`](tinymcp/README.md#取用方式)。
-
-### 是否需要 npm install？
-
-| 角色 | 是否需要 | 说明 |
-|------|----------|------|
-| **使用者** | **否** | 只用 `dist/*.cjs`，不必复制源码 |
-| **开发者**（改 `src/`） | **是** | `cd mcp/tinymcp && npm install && npm run build` |
-
-### Version Notes
-
-| 版本 | 说明 |
-|------|------|
-| 1.0.0 | 新增 tinynokeymcp：免 Key Web 后台压缩 |
-| 2.2.0 | tinymcp 格式转换（avif/webp/jpg/png/jxl）；MCP convert_* Tools；CLI `-f` / `-F` |
-| 2.1.1 | MCP 默认覆盖原图；取用统一为 `.cursor/tinymcp/` |
-| 2.1.0 | 支持多 `TINIFY_API_KEY`（`,` / `;` 分隔），轮询与失败切换 |
-| 2.0.0 | 官方 API；目录与产物更名为 **tinymcp** |
-| 1.x | 旧名 `tinypng-mcp`、网站未公开接口（已废弃） |
+| 名称 | 简介 | 详细说明 |
+|------|------|----------|
+| `tinymcp` | 使用 TinyPNG 官方 API 压缩或转换图片，须 API Key | [README](tinymcp/README.md) · [免责声明](tinymcp/DISCLAIMER.md) |
+| `tinynokeymcp` | 通过 TinyPNG 未公开 Web 后台免 Key 压缩 PNG/JPG，不适合生产 | [README](tinynokeymcp/README.md) · [免责声明](tinynokeymcp/DISCLAIMER.md) |
 
 ---
 

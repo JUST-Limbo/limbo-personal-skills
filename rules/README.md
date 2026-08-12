@@ -19,6 +19,8 @@
 | Claude Code（项目内） | `.claude/rules/<name>.md` | 无 `paths:` 即全局 |
 | GitHub Copilot | 合并进 `.github/copilot-instructions.md` | 仓库级自动加载 |
 
+上表仅列常见示例；其它 Agent、编辑器或客户端应按其最新官方文档确定用户级或项目级配置位置、文件格式与加载规则。
+
 Cursor 全局 Rule 的 frontmatter 示例：
 
 ```yaml

@@ -18,7 +18,7 @@ program
   .description("用 TinyPNG 官方 API 压缩或转换图片格式")
   .argument("<patterns...>", "图片路径或 glob，如 'assets/**/*.{png,jpg}'")
   .option("-k, --key <keys>", "API Key（默认 TINIFY_API_KEY；多个用 , 或 ; 分隔）")
-  .option("-o, --out <dir>", "输出目录或文件路径")
+  .option("-o, --out <dir>", "输出目录")
   .option(
     "-f, --format <fmt>",
     "目标格式：avif | webp | jpg | png | jxl（指定则转格式，否则仅压缩原格式）"

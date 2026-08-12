@@ -32801,7 +32801,7 @@ async function convertToFormats(input, opts = {}) {
 setApiKey(process.env.TINIFY_API_KEY);
 var server = new McpServer({
   name: "tinymcp",
-  version: "2.2.0"
+  version: "2.2.1"
 });
 function kb(n) {
   return (n / 1024).toFixed(1) + "KB";
