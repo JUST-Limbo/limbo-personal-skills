@@ -71,6 +71,10 @@ alwaysApply: true
 
 #### Version Notes
 
+**1.4.0**
+
+- 新增 WSL 文件系统项目的 Git 操作约束：在 WSL 终端执行，避免经 Windows 的 `\\wsl.localhost\...` 路径调用 Git。
+
 **1.3.0**
 
 - 新增 DOM 结构约束：检查改动前后节点职责变化，在不影响现有行为且不扩大范围的前提下移除本次改动涉及的冗余节点。
