@@ -71,6 +71,10 @@ alwaysApply: true
 
 #### Version Notes
 
+**1.4.1**
+
+- 将 WSL 文件系统项目的 Git 操作约束调整为独立章节，避免被误解为仅适用于远程操作。
+
 **1.4.0**
 
 - 新增 WSL 文件系统项目的 Git 操作约束：在 WSL 终端执行，避免经 Windows 的 `\\wsl.localhost\...` 路径调用 Git。
