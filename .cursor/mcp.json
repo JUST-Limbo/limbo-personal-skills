@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "tinymcp": {
+    "tinypng-mcp": {
       "command": "node",
-      "args": ["mcp/tinymcp/dist/tinymcp.cjs"],
+      "args": ["mcp/tinypng-mcp/dist/tinypng-mcp.cjs"],
       "env": {
         "TINIFY_API_KEY": ""
       }

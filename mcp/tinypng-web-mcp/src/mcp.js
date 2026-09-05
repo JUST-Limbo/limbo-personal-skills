@@ -7,8 +7,8 @@ import * as z from "zod/v4";
 import { compressFile } from "./core.js";
 
 const server = new McpServer({
-  name: "tinynokeymcp",
-  version: "1.0.1",
+  name: "tinypng-web-mcp",
+  version: "2.0.0",
 });
 
 function kb(n) {
@@ -25,7 +25,7 @@ function formatResult(r) {
     text += `\n- 尺寸: ${r.width}×${r.height}`;
   }
   text +=
-    "\n- 说明: 走 tinypng.com 未公开 Web 接口，非官方 API；生产环境请用 tinymcp + API Key";
+    "\n- 说明: 走 tinypng.com 未公开 Web 接口，非官方 API；生产环境请用 tinypng-mcp + API Key";
   return text;
 }
 
@@ -111,10 +111,10 @@ server.registerTool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("[tinynokeymcp] ready (stdio, web backend, no API key)");
+  console.error("[tinypng-web-mcp] ready (stdio, web backend, no API key)");
 }
 
 main().catch(function (err) {
-  console.error("[tinynokeymcp] fatal:", err);
+  console.error("[tinypng-web-mcp] fatal:", err);
   process.exit(1);
 });

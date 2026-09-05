@@ -14,7 +14,7 @@ const kb = (n) => `${(n / 1024).toFixed(1)}KB`;
 
 const program = new Command();
 program
-  .name("tinymcp")
+  .name("tinypng-mcp")
   .description("用 TinyPNG 官方 API 压缩或转换图片格式")
   .argument("<patterns...>", "图片路径或 glob，如 'assets/**/*.{png,jpg}'")
   .option("-k, --key <keys>", "API Key（默认 TINIFY_API_KEY；多个用 , 或 ; 分隔）")

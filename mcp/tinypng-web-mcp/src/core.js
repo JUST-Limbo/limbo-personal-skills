@@ -2,7 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { extname } from "node:path";
 import https from "node:https";
 
-/** tinynokeymcp 1.0.1 — 官网 Web 后台免 Key 压缩（非官方 API） */
+/** tinypng-web-mcp 2.0.0 — 官网 Web 后台免 Key 压缩（非官方 API） */
 const SHRINK_URL = "https://tinypng.com/backend/opt/shrink";
 const MAX_BYTES = 5_200_000;
 const ALLOWED_EXT = new Set([".png", ".jpg", ".jpeg"]);

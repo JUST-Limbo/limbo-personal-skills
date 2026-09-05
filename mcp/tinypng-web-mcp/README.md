@@ -1,22 +1,22 @@
 ---
-name: tinynokeymcp
+name: tinypng-web-mcp
 description: MCP server for compressing PNG/JPG via TinyPNG web backend without API key
-x-mcp-version: 1.0.1
+x-mcp-version: 2.0.0
 x-source-repo: JUST-Limbo/limbo-ai-toolkit
-x-source-path: mcp/tinynokeymcp
+x-source-path: mcp/tinypng-web-mcp
 ---
 
-# tinynokeymcp
+# tinypng-web-mcp
 
 **免 API Key** 的 TinyPNG 图片压缩 **MCP Server** 与 **CLI**。
 
 通过模拟官网浏览器上传，请求 `tinypng.com/backend/opt/shrink`（**非**官方 Developer API）。实现参考公开项目 [yongplus/tinypng](https://github.com/yongplus/tinypng) Web 模式、[super-tinypng](https://github.com/zhanyuzhang/super-tinypng)。
 
-当前版本：**1.0.1**
+当前版本：**2.0.0**
 
-> **取用原则**：从 `mcp/tinynokeymcp/dist/` **只复制** `tinynokeymcp.cjs`（以及按需复制 `tinynokeymcp-cli.cjs`）。目标存放位置与 MCP 配置文件由调用方根据所用客户端的规则决定；无需 `npm install`，不必复制 `src/` 等源码。
+> **取用原则**：从 `mcp/tinypng-web-mcp/dist/` **只复制** `tinypng-web-mcp.cjs`（以及按需复制 `tinypng-web-mcp-cli.cjs`）。目标存放位置与 MCP 配置文件由调用方根据所用客户端的规则决定；无需 `npm install`，不必复制 `src/` 等源码。
 >
-> **生产环境请用 [tinymcp](../tinymcp/README.md)**（官方 API + Key）。使用前必读 [DISCLAIMER.md](DISCLAIMER.md)。
+> **生产环境请用 [tinypng-mcp](../tinypng-mcp/README.md)**（官方 API + Key）。使用前必读 [DISCLAIMER.md](DISCLAIMER.md)。
 
 ---
 
@@ -35,7 +35,7 @@ x-source-path: mcp/tinynokeymcp
 ### 不负责的范围
 
 - **不提供**官方 API 的稳定性、额度与合规保障
-- **不支持** WebP / AVIF、格式转换、缩放（官方 API 能力请用 tinymcp）
+- **不支持** WebP / AVIF、格式转换、缩放（官方 API 能力请用 tinypng-mcp）
 - **不适合**商用、CI 长期跑、大批量生产
 
 ### 提供的能力
@@ -44,7 +44,7 @@ x-source-path: mcp/tinynokeymcp
 |------|------|
 | MCP `compress_local_image` | 压缩单张 PNG/JPG |
 | MCP `compress_images_glob` | glob 批量压缩 |
-| CLI `tinynokeymcp` | 终端批量压缩 |
+| CLI `tinypng-web-mcp` | 终端批量压缩 |
 | 库 `compressFile()` | Node 脚本调用 |
 
 限制：单文件约 **≤ 5MB**；仅 **`.png` / `.jpg` / `.jpeg`**；需能访问 `tinypng.com`。
@@ -70,19 +70,19 @@ x-source-path: mcp/tinynokeymcp
 
 ### 1. 取用并配置 MCP
 
-按照[取用方式](#取用方式)复制构建产物，并根据所用 MCP 客户端的规则配置 `tinynokeymcp.cjs` 的实际路径。本工具无需 `TINIFY_API_KEY`。保存后按客户端提供的方式重载 MCP 配置；必要时重启客户端。
+按照[取用方式](#取用方式)复制构建产物，并根据所用 MCP 客户端的规则配置 `tinypng-web-mcp.cjs` 的实际路径。本工具无需 `TINIFY_API_KEY`。保存后按客户端提供的方式重载 MCP 配置；必要时重启客户端。
 
 ### 2. 对话示例
 
 ```text
-用 tinynokeymcp 把 C:/project/assets/logo.png 压一下
+用 tinypng-web-mcp 把 C:/project/assets/logo.png 压一下
 ```
 
 ### 3. CLI（可选）
 
 ```powershell
-node "path/to/tinynokeymcp-cli.cjs" logo.png
-node "path/to/tinynokeymcp-cli.cjs" "assets/**/*.png" -o dist
+node "path/to/tinypng-web-mcp-cli.cjs" logo.png
+node "path/to/tinypng-web-mcp-cli.cjs" "assets/**/*.png" -o dist
 ```
 
 未指定 `-o` 时**覆盖原文件**。
@@ -121,7 +121,7 @@ const r = await compressFile("logo.png", { output: "logo.png" });
 ## 开发与重新打包
 
 ```bash
-cd mcp/tinynokeymcp
+cd mcp/tinypng-web-mcp
 npm install
 npm run build
 ```
@@ -132,10 +132,10 @@ npm run build
 
 ## 取用方式
 
-从 `mcp/tinynokeymcp/dist/` 取用以下已打包文件：
+从 `mcp/tinypng-web-mcp/dist/` 取用以下已打包文件：
 
-- MCP Server 必需：`tinynokeymcp.cjs`
-- CLI 可选：`tinynokeymcp-cli.cjs`
+- MCP Server 必需：`tinypng-web-mcp.cjs`
+- CLI 可选：`tinypng-web-mcp-cli.cjs`
 
 将文件放到调用方允许且能够访问的位置。不同 MCP 客户端的配置目录和文件格式不同，应以所用客户端的规则为准，不要默认使用某个客户端的专属目录。
 
@@ -144,9 +144,9 @@ npm run build
 ```json
 {
   "mcpServers": {
-    "tinynokeymcp": {
+    "tinypng-web-mcp": {
       "command": "node",
-      "args": ["<实际路径>/tinynokeymcp.cjs"]
+      "args": ["<实际路径>/tinypng-web-mcp.cjs"]
     }
   }
 }
@@ -154,7 +154,7 @@ npm run build
 
 说明：
 
-- **只复制** `dist/tinynokeymcp.cjs`（以及按需复制 `dist/tinynokeymcp-cli.cjs`），**不要**复制 `src/` 等源码。
+- **只复制** `dist/tinypng-web-mcp.cjs`（以及按需复制 `dist/tinypng-web-mcp-cli.cjs`），**不要**复制 `src/` 等源码。
 - 是否把 `.cjs` 文件放入项目以及是否提交 git，由调用方项目的依赖与安全策略决定。
 - 多个客户端可以指向同一份 `.cjs` 文件，也可以各自维护；路径必须按各客户端的配置规则填写。
 - 本工具**无需** `TINIFY_API_KEY`。
@@ -163,9 +163,9 @@ npm run build
 
 ---
 
-## 与 tinymcp 对比
+## 与 tinypng-mcp 对比
 
-| | tinynokeymcp | tinymcp |
+| | tinypng-web-mcp | tinypng-mcp |
 |---|--------------|---------|
 | API Key | **不需要** | 需要 `TINIFY_API_KEY` |
 | 接口 | 官网 Web 后台（未公开） | 官方 `api.tinify.com` |
@@ -180,6 +180,7 @@ npm run build
 
 | 版本 | 说明 |
 |------|------|
+| **2.0.0** | 破坏性重命名：`tinynokeymcp` 改为 `tinypng-web-mcp`，同步目录、包名、CLI、MCP 服务标识和构建产物名 |
 | **1.0.1** | 取用和客户端配置说明改为客户端无关表述 |
 | **1.0.0** | 初始版本：Web 后台免 Key 压缩；MCP + CLI + `compressFile` |
 

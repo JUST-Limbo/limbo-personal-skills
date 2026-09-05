@@ -15,8 +15,8 @@ import {
 setApiKey(process.env.TINIFY_API_KEY);
 
 const server = new McpServer({
-  name: "tinymcp",
-  version: "2.2.1",
+  name: "tinypng-mcp",
+  version: "3.0.0",
 });
 
 function kb(n) {
@@ -267,10 +267,10 @@ server.registerTool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("[tinymcp] ready (stdio, official API)");
+  console.error("[tinypng-mcp] ready (stdio, official API)");
 }
 
 main().catch((err) => {
-  console.error("[tinymcp] fatal:", err);
+  console.error("[tinypng-mcp] fatal:", err);
   process.exit(1);
 });

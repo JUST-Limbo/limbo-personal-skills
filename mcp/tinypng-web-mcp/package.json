@@ -1,11 +1,11 @@
 {
-  "name": "@limbo/tinymcp",
-  "version": "2.2.1",
-  "description": "TinyPNG 官方 API 图片压缩 MCP + CLI（tinymcp）",
+  "name": "@limbo/tinypng-web-mcp",
+  "version": "2.0.0",
+  "description": "TinyPNG 官网 Web 后台免 Key 图片压缩 MCP + CLI（非官方 API）",
   "type": "module",
   "bin": {
-    "tinymcp": "dist/tinymcp-cli.cjs",
-    "tinymcp-server": "dist/tinymcp.cjs"
+    "tinypng-web-mcp": "dist/tinypng-web-mcp-cli.cjs",
+    "tinypng-web-mcp-server": "dist/tinypng-web-mcp.cjs"
   },
   "main": "src/core.js",
   "exports": "./src/core.js",
@@ -21,17 +21,18 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "start": "node dist/tinymcp-cli.cjs",
-    "mcp": "node dist/tinymcp.cjs",
+    "start": "node dist/tinypng-web-mcp-cli.cjs",
+    "mcp": "node dist/tinypng-web-mcp.cjs",
     "dev:mcp": "node src/mcp.js",
     "dev:cli": "node bin/cli.js"
   },
   "keywords": [
-    "tinymcp",
+    "tinypng-web-mcp",
     "tinypng",
     "mcp",
     "image",
-    "compress"
+    "compress",
+    "no-key"
   ],
   "license": "MIT",
   "devDependencies": {
@@ -41,7 +42,6 @@
     "@modelcontextprotocol/sdk": "^1.29.0",
     "commander": "^12.1.0",
     "fast-glob": "^3.3.2",
-    "tinify": "^1.8.1",
     "zod": "^4.4.3"
   }
 }

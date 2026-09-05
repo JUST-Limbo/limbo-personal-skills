@@ -27758,8 +27758,8 @@ async function compressFile(input, options = {}) {
 
 // src/mcp.js
 var server = new McpServer({
-  name: "tinynokeymcp",
-  version: "1.0.1"
+  name: "tinypng-web-mcp",
+  version: "2.0.0"
 });
 function kb(n) {
   return (n / 1024).toFixed(1) + "KB";
@@ -27773,7 +27773,7 @@ function formatResult(r) {
     text += `
 - \u5C3A\u5BF8: ${r.width}\xD7${r.height}`;
   }
-  text += "\n- \u8BF4\u660E: \u8D70 tinypng.com \u672A\u516C\u5F00 Web \u63A5\u53E3\uFF0C\u975E\u5B98\u65B9 API\uFF1B\u751F\u4EA7\u73AF\u5883\u8BF7\u7528 tinymcp + API Key";
+  text += "\n- \u8BF4\u660E: \u8D70 tinypng.com \u672A\u516C\u5F00 Web \u63A5\u53E3\uFF0C\u975E\u5B98\u65B9 API\uFF1B\u751F\u4EA7\u73AF\u5883\u8BF7\u7528 tinypng-mcp + API Key";
   return text;
 }
 server.registerTool(
@@ -27844,10 +27844,10 @@ server.registerTool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("[tinynokeymcp] ready (stdio, web backend, no API key)");
+  console.error("[tinypng-web-mcp] ready (stdio, web backend, no API key)");
 }
 main().catch(function(err) {
-  console.error("[tinynokeymcp] fatal:", err);
+  console.error("[tinypng-web-mcp] fatal:", err);
   process.exit(1);
 });
 /*! Bundled license information:

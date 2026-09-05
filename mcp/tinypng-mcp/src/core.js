@@ -4,7 +4,7 @@ import tinify from "tinify";
 
 const ALLOWED_EXT = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif"]);
 
-/** tinymcp 2.2.0 — 格式转换 MIME 映射 */
+/** tinypng-mcp 3.0.0 — 格式转换 MIME 映射 */
 const FORMAT_ALIASES = {
   avif: "image/avif",
   webp: "image/webp",

@@ -17,13 +17,13 @@ const shared = {
 await esbuild.build({
   ...shared,
   entryPoints: ["src/mcp.js"],
-  outfile: "dist/tinynokeymcp.cjs",
+  outfile: "dist/tinypng-web-mcp.cjs",
 });
 
 await esbuild.build({
   ...shared,
   entryPoints: ["bin/cli.js"],
-  outfile: "dist/tinynokeymcp-cli.cjs",
+  outfile: "dist/tinypng-web-mcp-cli.cjs",
 });
 
-console.log("built dist/tinynokeymcp.cjs, dist/tinynokeymcp-cli.cjs");
+console.log("built dist/tinypng-web-mcp.cjs, dist/tinypng-web-mcp-cli.cjs");

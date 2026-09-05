@@ -10,7 +10,7 @@ const kb = function (n) {
 
 const program = new Command();
 program
-  .name("tinynokeymcp")
+  .name("tinypng-web-mcp")
   .description("免 API Key：通过 TinyPNG 官网 Web 后台压缩 PNG/JPG")
   .argument("<patterns...>", "图片路径或 glob")
   .option("-o, --out <dir>", "输出目录（默认覆盖原文件）")

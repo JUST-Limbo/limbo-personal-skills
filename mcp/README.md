@@ -16,8 +16,8 @@
 
 | 名称 | 简介 | 详细说明 |
 |------|------|----------|
-| `tinymcp` | 使用 TinyPNG 官方 API 压缩或转换图片，须 API Key | [README](tinymcp/README.md) · [免责声明](tinymcp/DISCLAIMER.md) |
-| `tinynokeymcp` | 通过 TinyPNG 未公开 Web 后台免 Key 压缩 PNG/JPG，不适合生产 | [README](tinynokeymcp/README.md) · [免责声明](tinynokeymcp/DISCLAIMER.md) |
+| `tinypng-mcp` | 使用 TinyPNG 官方 API 压缩或转换图片，须 API Key | [README](tinypng-mcp/README.md) · [免责声明](tinypng-mcp/DISCLAIMER.md) |
+| `tinypng-web-mcp` | 通过 TinyPNG 未公开 Web 后台免 Key 压缩 PNG/JPG，不适合生产 | [README](tinypng-web-mcp/README.md) · [免责声明](tinypng-web-mcp/DISCLAIMER.md) |
 
 ---
 

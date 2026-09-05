@@ -127,7 +127,7 @@ Skill 的版本治理、改码注释、旧版本痕迹处理等细则见下文�
 
 | 类型 | 路径 | 说明 |
 |------|------|------|
-| MCP | [`.cursor/mcp.json`](.cursor/mcp.json) | 内置 `tinymcp`（官方 API，需 `TINIFY_API_KEY`） |
+| MCP | [`.cursor/mcp.json`](.cursor/mcp.json) | 内置 `tinypng-mcp`（官方 API，需 `TINIFY_API_KEY`） |
 
 新增项目本地配置时，按上述「同步要求」在各在用工具里各放一份，并在此登记。
 

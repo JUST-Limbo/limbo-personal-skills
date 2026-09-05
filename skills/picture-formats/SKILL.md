@@ -5,7 +5,7 @@ description: >-
   exports and HTML picture element selection. Use when adding responsive image
   formats, picture tags, Vue image components, transparent logo fallbacks,
   Network debugging for image requests, or preparing multi-format assets with
-  tinymcp/sharp/build scripts.
+  tinypng-mcp/sharp/build scripts.
 x-skill-version: 1.0.1
 x-source-repo: JUST-Limbo/limbo-ai-toolkit
 x-source-path: skills/picture-formats
@@ -29,7 +29,7 @@ x-source-path: skills/picture-formats
 
 - 串联有损转码（`PNG → AVIF → WebP → JPEG`）
 - 图片 CDN 协商式分发（`Accept` 头）的完整接入方案（仅作备选说明）
-- 用 `tinynokeymcp` 产出 AVIF/WebP（该 MCP 仅压 PNG/JPG，无转格式）
+- 用 `tinypng-web-mcp` 产出 AVIF/WebP（该 MCP 仅压 PNG/JPG，无转格式）
 
 ## 使用方法
 
@@ -233,7 +233,7 @@ React 等项目同理：`import` 拿 URL，DOM 层仍用 `<picture>`。
 ```
 设计导出 / 摄影原图
        ↓
-构建脚本（sharp、Vite 插件）或 tinymcp 并行生成 avif + webp + jpg/png
+构建脚本（sharp、Vite 插件）或 tinypng-mcp 并行生成 avif + webp + jpg/png
        ↓
 （可选）TinyPNG 再压一遍
        ↓
@@ -246,26 +246,26 @@ React 等项目同理：`import` 拿 URL，DOM 层仍用 `<picture>`。
 |------|------|
 | 构建时静态生成（**推荐**） | Vite/Webpack 插件、npm script + sharp；不占 TinyPNG 额度 |
 | `<picture>` 前端选型 | 最简单，不依赖 CDN |
-| tinymcp（本仓库 MCP） | 官方 API，须 `TINIFY_API_KEY`；每种目标格式各计 1 次额度 |
+| tinypng-mcp（本仓库 MCP） | 官方 API，须 `TINIFY_API_KEY`；每种目标格式各计 1 次额度 |
 | CDN Accept 协商 | 一个 URL，服务端按 `Accept` 返回格式 |
 
-### tinymcp CLI 示例
+### tinypng-mcp CLI 示例
 
-tinymcp 的取用、存放与客户端配置以 tinymcp 自身的发布说明为准。本 Skill 不依赖 tinymcp 的固定安装目录，仅说明多格式图片的转换参数：
+tinypng-mcp 的取用、存放与客户端配置以 tinypng-mcp 自身的发布说明为准。本 Skill 不依赖 tinypng-mcp 的固定安装目录，仅说明多格式图片的转换参数：
 
 ```bash
 # 单张转 WebP；默认在原图同目录生成 logo.webp
-node "path/to/tinymcp-cli.cjs" logo.png -f webp
+node "path/to/tinypng-mcp-cli.cjs" logo.png -f webp
 
 # 单张并行导出 avif + webp + jpg；默认输出到原图所在目录
-node "path/to/tinymcp-cli.cjs" hero.jpg -F avif,webp,jpg
+node "path/to/tinypng-mcp-cli.cjs" hero.jpg -F avif,webp,jpg
 ```
 
 MCP Tools：`convert_local_image_formats`（单张多格式）、`convert_images_glob`（批量）。
 
 **注意**：`avif,webp,jpg` 三格式 ≈ **3 次** API 额度；免费账户约 500 次/月/账户。
 
-### tinynokeymcp 的限制
+### tinypng-web-mcp 的限制
 
 免 Key、仅学习/临时：只能压 PNG/JPG，**不能**产出 AVIF/WebP，**不能**做多格式分发素材准备。
 
@@ -308,5 +308,5 @@ Network 里为什么三种格式都被请求了？帮我排查
 ```
 
 ```text
-用 tinymcp 把 hero.jpg 导出 avif webp jpg 三件套
+用 tinypng-mcp 把 hero.jpg 导出 avif webp jpg 三件套
 ```

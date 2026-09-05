@@ -1,6 +1,6 @@
 # 免责声明（Disclaimer）
 
-**请在使用 tinymcp 之前阅读本文档。使用本工具即表示你理解并同意下列内容。**
+**请在使用 tinypng-mcp 之前阅读本文档。使用本工具即表示你理解并同意下列内容。**
 
 ---
 
@@ -8,7 +8,7 @@
 
 - 本工具通过 [TinyPNG 官方 Developer API](https://tinypng.com/developers) 提供压缩能力。
 - 本仓库（`JUST-Limbo/limbo-ai-toolkit`）**不是** TinyPNG 或 Voormedia 的官方产品，**未获其授权或背书**。
-- 项目名称「tinymcp」仅作工具标识；压缩服务由 TinyPNG 提供，不构成商标关联。
+- 项目名称「tinypng-mcp」仅作工具标识；压缩服务由 TinyPNG 提供，不构成商标关联。
 
 ## 2. API Key
 
